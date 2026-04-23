@@ -1,0 +1,16 @@
+{
+  "name": "ppr-optimizer",
+  "version": "1.0.0",
+  "description": "PPR管材国标冷态尺寸优化系统",
+  "main": "index.html",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serve": "^14.2.6"
+  }
+}
