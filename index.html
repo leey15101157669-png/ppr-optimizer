@@ -437,7 +437,6 @@
       <textarea class="input-area" id="inputData" placeholder="请输入数据..."></textarea>
       <div class="btn-group">
         <button id="runSolver">启动计算</button>
-        <button class="secondary" id="showResult">查看结果</button>
       </div>
       <div class="result-area" id="resultOutput"></div>
     </div>
@@ -723,7 +722,6 @@
   const inputData = document.getElementById('inputData');
   const resultOutput = document.getElementById('resultOutput');
   const runSolverBtn = document.getElementById('runSolver');
-  const showResultBtn = document.getElementById('showResult');
   const closeModalBtn = document.getElementById('closeModal');
 
   let currentScenario = null;
@@ -758,12 +756,6 @@
 - 耗时：0.5s
 （注：此为前端模拟，实际对接求解器将返回真实结果）`;
     }, 1000);
-  });
-
-  showResultBtn.addEventListener('click', () => {
-    if (!resultOutput.textContent) {
-      resultOutput.textContent = '请先点击【启动计算】获取结果';
-    }
   });
 
   modal.addEventListener('click', (e) => {
