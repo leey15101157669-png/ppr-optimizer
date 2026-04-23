@@ -1,767 +1,757 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>支点互动 | PPR管材国标冷态尺寸优化系统</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #00D4FF; /* 云纳科技青色 */
-            --secondary-color: #7B2FFF; /* 科技紫 */
-            --accent-color: #00FFB3; /* 点缀绿 */
-            --dark-bg: #0A0F1E; /* 更深邃的背景 */
-            --light-dark-bg: #12182C;
-            --lighter-dark-bg: #1E2438;
-            --text-primary: #E6F1FF;
-            --text-secondary: #8892B0;
-            --success-color: #00D4FF;
-            --warning-color: #FFB800;
-            --danger-color: #FF6B6B;
-            --border-radius: 8px;
-            --box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
-        }
+  <meta charset="UTF-8" />
+  <title>正维企业版运筹求解器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --card: rgba(255,255,255,0.06);
+      --blue: #3b82f6;
+      --cyan: #22d3ee;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #0F172A 100%);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
 
-        .container {
-            width: 90%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 0;
-        }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
 
-        /* Header */
-        header {
-            background: rgba(10, 15, 30, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--light-dark-bg);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+    header {
+      text-align: center;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-        .logo i {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    p.subtitle {
+      color: var(--muted);
+      font-size: 16px;
+    }
 
-        .logo h1 {
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            font-weight: 600;
-        }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
 
-        .logo span {
-            color: var(--accent-color);
-            font-weight: 400;
-        }
+    .icon-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1px solid rgba(255,255,255,0.08);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
 
-        /* Main Content */
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 30px;
-        }
+    .icon-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
 
-        @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
+    .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+    }
 
-        /* Card Styles */
-        .card {
-            background-color: var(--light-dark-bg);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--box-shadow);
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
+    .icon.nurse { background: #3b82f6; }
+    .icon.salesman { background: #8b5cf6; }
+    .icon.task { background: #10b981; }
+    .icon.cloud { background: #ef4444; }
+    .icon.conference { background: #f59e0b; }
+    .icon.vehicle { background: #14b8a6; }
+    .icon.hospital { background: #ec4899; }
+    .icon.machine { background: #6366f1; }
+    .icon.timetable { background: #06b6d4; }
+    .icon.tour { background: #3b82f6; }
+    .icon.project { background: #8b5cf6; }
+    .icon.nqueens { background: #10b981; }
+    .icon.exam { background: #ef4444; }
+    .icon.coach { background: #f59e0b; }
+    .icon.cheap { background: #14b8a6; }
+    .icon.scrabble { background: #ec4899; }
+    .icon.meeting { background: #6366f1; }
+    .icon.tournament { background: #06b6d4; }
+    .icon.investment { background: #3b82f6; }
+    .icon.dinner { background: #8b5cf6; }
+    .icon.tennis { background: #10b981; }
+    .icon.flight { background: #ef4444; }
 
-        .card:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-5px);
-        }
+    .icon-card h3 {
+      font-size: 16px;
+      margin: 8px 0 4px;
+    }
 
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--lighter-dark-bg);
-        }
+    .icon-card p {
+      font-size: 12px;
+      color: var(--muted);
+    }
 
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-        }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .card-title h2 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
+    .modal-content {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 24px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
 
-        .card-title p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
 
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .modal-header h2 {
+      font-size: 20px;
+    }
 
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-            font-weight: 500;
-        }
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 24px;
+      cursor: pointer;
+    }
 
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            background-color: var(--dark-bg);
-            border: 1px solid var(--lighter-dark-bg);
-            border-radius: var(--border-radius);
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
+    .modal-body {
+      margin-bottom: 16px;
+    }
 
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
-        }
+    .modal-body p {
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
 
-        .input-with-unit {
-            position: relative;
-        }
+    .input-area {
+      width: 100%;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--text);
+      resize: vertical;
+      min-height: 120px;
+    }
 
-        .unit {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
 
-        .range-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
+    button {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
 
-        /* Button */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
+    button:hover {
+      background: #2563eb;
+    }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
-        }
+    button.secondary {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+    }
 
-        /* Results Section */
-        .results-section {
-            margin-top: 30px;
-        }
+    button.secondary:hover {
+      background: rgba(255,255,255,0.08);
+    }
 
-        .result-item {
-            background-color: var(--dark-bg);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--primary-color);
-        }
+    .result-area {
+      margin-top: 16px;
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--cyan);
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
 
-        .result-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
+    .clients {
+      text-align: center;
+      padding: 32px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
 
-        .result-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
+    .clients h3 {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
 
-        .result-value.highlight {
-            color: var(--accent-color);
-        }
+    .client-logos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+    }
 
-        .result-value.success {
-            color: var(--success-color);
-        }
+    .client-logo {
+      width: 80px;
+      height: 40px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
 
-        .result-value.warning {
-            color: var(--warning-color);
-        }
-
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        /* Validation Messages */
-        .validation-message {
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-top: 20px;
-            display: none;
-        }
-
-        .validation-message.error {
-            background-color: rgba(255, 107, 107, 0.1);
-            border-left: 4px solid var(--danger-color);
-            color: var(--danger-color);
-            display: block;
-        }
-
-        .validation-message.success {
-            background-color: rgba(0, 212, 255, 0.1);
-            border-left: 4px solid var(--success-color);
-            color: var(--success-color);
-            display: block;
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            margin-top: 50px;
-            border-top: 1px solid var(--light-dark-bg);
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Product Selector */
-        .product-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .product-option {
-            padding: 12px;
-            background-color: var(--dark-bg);
-            border: 1px solid var(--lighter-dark-bg);
-            border-radius: var(--border-radius);
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .product-option:hover {
-            border-color: var(--primary-color);
-        }
-
-        .product-option.active {
-            background-color: rgba(0, 212, 255, 0.1);
-            border-color: var(--primary-color);
-            color: var(--accent-color);
-        }
-
-        .product-option .spec {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* SDR Badge */
-        .sdr-badge {
-            display: inline-block;
-            background: rgba(0, 255, 179, 0.1);
-            color: var(--accent-color);
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            margin-left: 10px;
-        }
-    </style>
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="logo">
-        </div>
-        <nav>
-            <a href="#" style="color: var(--text-secondary); text-decoration: none;">
-                <i class="fas fa-question-circle"></i> 智能助手
-            </a>
-        </nav>
-    </header>
 
-    <div class="container">
-        <!-- Title -->
-        <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                PPR管材国标冷态尺寸优化系统
-            </h1>
-            <p style="color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
-                基于云纳科技LLM底座与RAG知识库，通过智能算法求解满足国标约束的最佳冷态尺寸
-            </p>
-        </div>
+<div class="container">
+  <header>
+    <h1>正维企业版运筹求解器</h1>
+    <p class="subtitle">专注企业级整数规划与优化决策，覆盖生产排产、材料切割、包装规划、运输规划等全场景</p>
+  </header>
 
-        <div class="main-content">
-            <!-- Input Parameters Card -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-sliders-h"></i>
-                    </div>
-                    <div class="card-title">
-                        <h2>参数配置</h2>
-                        <p>设置米重范围与产品规格</p>
-                    </div>
-                </div>
-
-                <!-- Product Specification -->
-                <div class="form-group">
-                    <label class="form-label">产品规格选择</label>
-                    <div class="product-selector">
-                        <div class="product-option active" data-dn="20" data-en="2.0">
-                            <div>DN20 × 2.0</div>
-                            <div class="spec">SDR 10</div>
-                        </div>
-                        <div class="product-option" data-dn="25" data-en="2.3">
-                            <div>DN25 × 2.3</div>
-                            <div class="spec">SDR 11</div>
-                        </div>
-                        <div class="product-option" data-dn="32" data-en="2.9">
-                            <div>DN32 × 2.9</div>
-                            <div class="spec">SDR 11</div>
-                        </div>
-                        <div class="product-option" data-dn="custom">
-                            <div>自定义</div>
-                            <div class="spec">手动输入</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Nominal Dimensions -->
-                <div class="form-group">
-                    <label class="form-label">公称尺寸 (mm)</label>
-                    <div class="range-inputs">
-                        <div class="input-with-unit">
-                            <input type="number" id="nominalDiameter" class="form-input" value="20" step="0.1">
-                            <span class="unit">外径</span>
-                        </div>
-                        <div class="input-with-unit">
-                            <input type="number" id="nominalThickness" class="form-input" value="2.0" step="0.1">
-                            <span class="unit">壁厚</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tolerances -->
-                <div class="form-group">
-                    <label class="form-label">公差范围 (mm)</label>
-                    <div class="range-inputs">
-                        <div class="input-with-unit">
-                            <input type="number" id="diameterTolerance" class="form-input" value="0.3" step="0.05">
-                            <span class="unit">外径 ±</span>
-                        </div>
-                        <div class="input-with-unit">
-                            <input type="number" id="thicknessTolerance" class="form-input" value="0.2" step="0.05">
-                            <span class="unit">壁厚 ±</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Weight Range -->
-                <div class="form-group">
-                    <label class="form-label">米重范围 (g/m)</label>
-                    <div class="range-inputs">
-                        <div class="input-with-unit">
-                            <input type="number" id="minWeight" class="form-input" value="100" step="1">
-                            <span class="unit">最小值</span>
-                        </div>
-                        <div class="input-with-unit">
-                            <input type="number" id="maxWeight" class="form-input" value="150" step="1">
-                            <span class="unit">最大值</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Material Density -->
-                <div class="form-group">
-                    <label class="form-label">材料参数</label>
-                    <div class="input-with-unit">
-                        <input type="number" id="density" class="form-input" value="0.91" step="0.01">
-                        <span class="unit">密度 (g/cm³)</span>
-                    </div>
-                </div>
-
-                <!-- Calculate Button -->
-                <button id="calculateBtn" class="btn">
-                    <span id="btnText">启动智能优化</span>
-                    <div id="spinner" class="spinner"></div>
-                    <i class="fas fa-robot"></i>
-                </button>
-
-                <!-- Validation Message -->
-                <div id="validationMessage" class="validation-message"></div>
-            </div>
-
-            <!-- Results Card -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="card-title">
-                        <h2>优化结果</h2>
-                        <p>最佳冷态尺寸与性能指标</p>
-                    </div>
-                </div>
-
-                <div id="resultsContainer" style="display: none;">
-                    <!-- Best Solution -->
-                    <div class="result-item" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 47, 255, 0.1));">
-                        <div class="result-label">最佳冷态尺寸</div>
-                        <div class="result-value highlight" id="bestDimensions">19.70 × 2.20 mm</div>
-                    </div>
-
-                    <!-- Key Metrics -->
-                    <div class="result-grid">
-                        <div class="result-item">
-                            <div class="result-label">SDR 值</div>
-                            <div class="result-value success" id="sdrValue">10.00</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-label">实际米重</div>
-                            <div class="result-value" id="actualWeight">110.07 g/m</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-label">外径偏差</div>
-                            <div class="result-value warning" id="diameterDeviation">-0.30 mm</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-label">壁厚偏差</div>
-                            <div class="result-value success" id="thicknessDeviation">+0.20 mm</div>
-                        </div>
-                    </div>
-
-                    <!-- Verification -->
-                    <div style="margin-top: 20px;">
-                        <h3 style="margin-bottom: 15px; color: var(--text-primary);">合规性验证</h3>
-                        <div class="result-item">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span class="result-label">米重是否在范围内</span>
-                                <span id="weightCheck" class="result-value success">✓ 是</span>
-                            </div>
-                        </div>
-                        <div class="result-item">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span class="result-label">是否符合 GB/T 18742.2-2017</span>
-                                <span id="standardCheck" class="result-value success">✓ 是</span>
-                            </div>
-                        </div>
-                        <div class="result-item">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span class="result-label">SDR 是否最小</span>
-                                <span id="sdrCheck" class="result-value success">✓ 是</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Empty State -->
-                <div id="emptyState" style="text-align: center; padding: 60px 20px;">
-                    <i class="fas fa-flask" style="font-size: 3rem; color: var(--lighter-dark-bg); margin-bottom: 20px;"></i>
-                    <h3 style="color: var(--text-secondary); margin-bottom: 10px;">等待智能计算</h3>
-                    <p style="color: var(--text-secondary);">配置好参数后点击"启动智能优化"按钮</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Algorithm Info -->
-        <div class="card" style="margin-top: 30px;">
-            <div class="card-header">
-                <div class="card-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <div class="card-title">
-                    <h2>算法说明</h2>
-                    <p>基于国标离散SDR的智能优化算法</p>
-                </div>
-            </div>
-            <div style="color: var(--text-secondary);">
-                <p><strong>优化目标：</strong>在满足国标GB/T 18742.2-2017的前提下，找到最小SDR值</p>
-                <p><strong>约束条件：</strong>米重 ∈ [MinWeight, MaxWeight]，尺寸 ∈ 公差范围</p>
-                <p><strong>算法策略：</strong>从国标允许的最小SDR开始验证，找到第一个满足米重约束的解</p>
-                <p><strong>物理公式：</strong>米重 = π × e × (D - e) × ρ</p>
-                <p><strong>国标SDR：</strong>SDR必须为标准离散值（如10.0、8.7、7.14等）</p>
-                <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--lighter-dark-bg);">
-                    <i class="fas fa-info-circle" style="color: var(--accent-color);"></i>
-                    本系统由云纳科技提供技术支持，融合了大模型推理与工业机理模型，确保计算结果的精准性与合规性。
-                </p>
-            </div>
-        </div>
+  <div class="grid" id="scenarioGrid">
+    <a class="icon-card" href="ppr.html" data-scenario="nurse" data-link="true">
+      <div class="icon nurse">🧑‍⚕️</div>
+      <h3>护士排班</h3>
+      <p>Nurse rostering</p>
+    </a>
+    <div class="icon-card" data-scenario="salesman">
+      <div class="icon salesman">👨‍💼</div>
+      <h3>旅行推销员（路径优化）</h3>
+      <p>Traveling salesman</p>
     </div>
+    <div class="icon-card" data-scenario="task">
+      <div class="icon task">✅</div>
+      <h3>任务分配</h3>
+      <p>Task assigning</p>
+    </div>
+    <div class="icon-card" data-scenario="cloud">
+      <div class="icon cloud">☁️</div>
+      <h3>云资源平衡</h3>
+      <p>Cloud balancing</p>
+    </div>
+    <div class="icon-card" data-scenario="conference">
+      <div class="icon conference">📅</div>
+      <h3>会议排程</h3>
+      <p>Conference scheduling</p>
+    </div>
+    <div class="icon-card" data-scenario="vehicle">
+      <div class="icon vehicle">🚗</div>
+      <h3>车辆路径规划</h3>
+      <p>Vehicle routing</p>
+    </div>
+    <div class="icon-card" data-scenario="hospital">
+      <div class="icon hospital">🛏️</div>
+      <h3>医院床位规划</h3>
+      <p>Hospital bed planning</p>
+    </div>
+    <div class="icon-card" data-scenario="machine">
+      <div class="icon machine">⚙️</div>
+      <h3>机器重分配</h3>
+      <p>Machine reassignment</p>
+    </div>
+    <div class="icon-card" data-scenario="timetable">
+      <div class="icon timetable">📚</div>
+      <h3>课程时间表安排</h3>
+      <p>Course timetabling</p>
+    </div>
+    <div class="icon-card" data-scenario="tour">
+      <div class="icon tour">🎸</div>
+      <h3>摇滚巡演（行程规划）</h3>
+      <p>Rock tour</p>
+    </div>
+    <div class="icon-card" data-scenario="project">
+      <div class="icon project">📊</div>
+      <h3>项目工作排程</h3>
+      <p>Project job scheduling</p>
+    </div>
+    <div class="icon-card" data-scenario="nqueens">
+      <div class="icon nqueens">♕</div>
+      <h3>N皇后问题</h3>
+      <p>N queens</p>
+    </div>
+    <div class="icon-card" data-scenario="exam">
+      <div class="icon exam">📝</div>
+      <h3>考试排程</h3>
+      <p>Exam timetabling</p>
+    </div>
+    <div class="icon-card" data-scenario="coach">
+      <div class="icon coach">🚌</div>
+      <h3>教练班车集合调度</h3>
+      <p>Coach shuttle gathering</p>
+    </div>
+    <div class="icon-card" data-scenario="cheap">
+      <div class="icon cheap">💰</div>
+      <h3>低成本时段排程</h3>
+      <p>Cheap time scheduling</p>
+    </div>
+    <div class="icon-card" data-scenario="scrabble">
+      <div class="icon scrabble">🧩</div>
+      <h3>拼字游戏紧凑布局（填字优化）</h3>
+      <p>Scrabble compacter</p>
+    </div>
+    <div class="icon-card" data-scenario="meeting">
+      <div class="icon meeting">💬</div>
+      <h3>会议安排</h3>
+      <p>Meeting scheduling</p>
+    </div>
+    <div class="icon-card" data-scenario="tournament">
+      <div class="icon tournament">🏆</div>
+      <h3>巡回赛事安排</h3>
+      <p>Traveling tournament</p>
+    </div>
+    <div class="icon-card" data-scenario="investment">
+      <div class="icon investment">💹</div>
+      <h3>投资分配</h3>
+      <p>Investment allocation</p>
+    </div>
+    <div class="icon-card" data-scenario="dinner">
+      <div class="icon dinner">🍽️</div>
+      <h3>晚宴安排</h3>
+      <p>Dinner party</p>
+    </div>
+    <div class="icon-card" data-scenario="tennis">
+      <div class="icon tennis">🎾</div>
+      <h3>网球俱乐部排程</h3>
+      <p>Tennis club scheduling</p>
+    </div>
+    <div class="icon-card" data-scenario="flight">
+      <div class="icon flight">✈️</div>
+      <h3>机组人员排班</h3>
+      <p>Flight crew scheduling</p>
+    </div>
+  </div>
 
-    <footer>
-        <div class="container">
-            <p>© 2026 云纳科技 (Yunnatech). All Rights Reserved.</p>
-            <p>PPR管材冷态尺寸优化系统 v2.0 | 基于 GB/T 18742.2-2017 标准开发</p>
-        </div>
-    </footer>
+  <div class="clients">
+    <h3>合作客户</h3>
+    <div class="client-logos">
+      <div class="client-logo">九牧</div>
+      <div class="client-logo">海信</div>
+      <div class="client-logo">三一</div>
+      <div class="client-logo">徐工</div>
+      <div class="client-logo">海尔</div>
+      <div class="client-logo">TCL</div>
+      <div class="client-logo">三棵树</div>
+    </div>
+  </div>
+</div>
 
-    <script>
-        // DOM Elements
-        const nominalDiameterInput = document.getElementById('nominalDiameter');
-        const nominalThicknessInput = document.getElementById('nominalThickness');
-        const diameterToleranceInput = document.getElementById('diameterTolerance');
-        const thicknessToleranceInput = document.getElementById('thicknessTolerance');
-        const minWeightInput = document.getElementById('minWeight');
-        const maxWeightInput = document.getElementById('maxWeight');
-        const densityInput = document.getElementById('density');
-        const calculateBtn = document.getElementById('calculateBtn');
-        const btnText = document.getElementById('btnText');
-        const spinner = document.getElementById('spinner');
-        const validationMessage = document.getElementById('validationMessage');
-        const resultsContainer = document.getElementById('resultsContainer');
-        const emptyState = document.getElementById('emptyState');
-        const productOptions = document.querySelectorAll('.product-option');
+<div class="modal" id="scenarioModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modalTitle">场景标题</h2>
+      <button class="close-btn" id="closeModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p id="modalDesc">场景描述</p>
+      <label for="inputData">输入数据（默认格式）：</label>
+      <textarea class="input-area" id="inputData" placeholder="请输入数据..."></textarea>
+      <div class="btn-group">
+        <button id="runSolver">启动计算</button>
+        <button class="secondary" id="showResult">查看结果</button>
+      </div>
+      <div class="result-area" id="resultOutput"></div>
+    </div>
+  </div>
+</div>
 
-        // Constants
-        const STEP = 0.01; // Search step in mm
+<script>
+  const scenarios = {
+    nurse: {
+      title: "护士排班",
+      desc: "解决医院护士班次分配问题，满足人员技能、班次偏好、连续工作时长等约束，最小化人力成本或最大化满意度。",
+      defaultInput: `{
+  "nurses": ["A", "B", "C", "D"],
+  "shifts": ["早班", "中班", "夜班"],
+  "days": 7,
+  "constraints": {
+    "maxHours": 40,
+    "minRest": 8
+  }
+}`
+    },
+    salesman: {
+      title: "旅行推销员（路径优化）",
+      desc: "寻找访问所有城市并返回起点的最短路径，适用于物流配送、销售路线规划等场景。",
+      defaultInput: `{
+  "cities": ["北京", "上海", "广州", "深圳", "成都"],
+  "distances": [
+    [0, 1200, 1800, 1900, 1600],
+    [1200, 0, 1500, 1400, 1700],
+    [1800, 1500, 0, 1200, 1000],
+    [1900, 1400, 1200, 0, 1300],
+    [1600, 1700, 1000, 1300, 0]
+  ]
+}`
+    },
+    task: {
+      title: "任务分配",
+      desc: "将一组任务分配给一组员工或机器，使总耗时或总成本最小，同时满足能力匹配约束。",
+      defaultInput: `{
+  "tasks": ["T1", "T2", "T3"],
+  "workers": ["W1", "W2"],
+  "costs": [
+    [10, 20],
+    [15, 12],
+    [18, 14]
+  ]
+}`
+    },
+    cloud: {
+      title: "云资源平衡",
+      desc: "在多云环境中平衡虚拟机资源分配，降低能耗与成本，同时满足性能约束。",
+      defaultInput: `{
+  "vms": ["VM1", "VM2", "VM3"],
+  "hosts": ["HostA", "HostB"],
+  "cpu": [2, 4, 2],
+  "ram": [4, 8, 4],
+  "hostCapacity": { "HostA": { "cpu": 6, "ram": 12 }, "HostB": { "cpu": 6, "ram": 12 } }
+}`
+    },
+    conference: {
+      title: "会议排程",
+      desc: "安排会议时间与场地，避免冲突，满足参会人日程、会议室容量等约束。",
+      defaultInput: `{
+  "meetings": ["M1", "M2", "M3"],
+  "attendees": [["A", "B"], ["B", "C"], ["A", "C"]],
+  "slots": ["9:00", "10:00", "11:00"],
+  "rooms": ["R1", "R2"]
+}`
+    },
+    vehicle: {
+      title: "车辆路径规划",
+      desc: "为多辆车规划送货路径，最小化总行驶距离或时间，满足载重、时间窗等约束。",
+      defaultInput: `{
+  "depot": 0,
+  "customers": [1,2,3,4],
+  "demands": [1,2,3,1],
+  "capacities": [5,5],
+  "distanceMatrix": [
+    [0, 2, 9, 10, 11],
+    [1, 0, 6, 4, 5],
+    [15, 7, 0, 8, 3],
+    [6, 3, 12, 0, 1],
+    [10, 5, 9, 8, 0]
+  ]
+}`
+    },
+    hospital: {
+      title: "医院床位规划",
+      desc: "根据病人病情、科室需求、床位空闲率等，智能分配床位，提高周转率与资源利用率。",
+      defaultInput: `{
+  "patients": ["P1", "P2", "P3"],
+  "wards": ["WardA", "WardB"],
+  "wardCapacity": { "WardA": 3, "WardB": 2 },
+  "patientType": ["ICU", "普通", "ICU"]
+}`
+    },
+    machine: {
+      title: "机器重分配",
+      desc: "在设备故障或新任务到来时，重新分配任务到可用机器，最小化停机时间或延迟。",
+      defaultInput: `{
+  "machines": ["M1", "M2", "M3"],
+  "tasks": ["T1", "T2", "T3", "T4"],
+  "processingTime": [
+    [2, 3, 1],
+    [4, 2, 3],
+    [1, 4, 2]
+  ],
+  "failures": [false, true, false]
+}`
+    },
+    timetable: {
+      title: "课程时间表安排",
+      desc: "为学校或培训机构安排课程表，避免教师、教室冲突，满足课时分布均衡。",
+      defaultInput: `{
+  "classes": ["C1", "C2", "C3"],
+  "teachers": ["T1", "T2"],
+  "rooms": ["R1", "R2"],
+  "timeSlots": ["Mon-9", "Mon-10", "Tue-9"],
+  "conflicts": [
+    { "class": "C1", "teacher": "T1", "room": "R1" },
+    { "class": "C2", "teacher": "T2", "room": "R2" }
+  ]
+}`
+    },
+    tour: {
+      title: "摇滚巡演（行程规划）",
+      desc: "为乐队规划巡演城市顺序，使总路程最短，同时考虑场馆档期、休息日等。",
+      defaultInput: `{
+  "cities": ["城市A", "城市B", "城市C", "城市D"],
+  "distances": [
+    [0, 300, 400, 500],
+    [300, 0, 200, 300],
+    [400, 200, 0, 100],
+    [500, 300, 100, 0]
+  ],
+  "dates": ["2025-06-01", "2025-06-03", "2025-06-05", "2025-06-07"]
+}`
+    },
+    project: {
+      title: "项目工作排程",
+      desc: "对项目任务进行时间排序，确定最早完成时间，满足前后置依赖和资源限制。",
+      defaultInput: `{
+  "tasks": ["T1", "T2", "T3", "T4"],
+  "durations": [2, 3, 1, 4],
+  "dependencies": [[], [0], [1], [0,2]]
+}`
+    },
+    nqueens: {
+      title: "N皇后问题",
+      desc: "在 N×N 棋盘上放置 N 个皇后，使其互不攻击，是经典的约束满足问题。",
+      defaultInput: `{
+  "n": 8
+}`
+    },
+    exam: {
+      title: "考试排程",
+      desc: "为考试安排时间和教室，避免学生考试科目冲突，提高考试效率。",
+      defaultInput: `{
+  "exams": ["E1", "E2", "E3"],
+  "students": [["S1", "S2"], ["S2", "S3"], ["S1", "S3"]],
+  "timeSlots": ["T1", "T2", "T3"],
+  "rooms": ["R1", "R2"]
+}`
+    },
+    coach: {
+      title: "教练班车集合调度",
+      desc: "为球队安排教练与班车的集合时间地点，减少交通成本，确保所有成员准时到场。",
+      defaultInput: `{
+  "players": ["P1", "P2", "P3", "P4"],
+  "coaches": ["C1", "C2"],
+  "locations": ["家", "训练场"],
+  "travelTime": [
+    [10, 5],
+    [8, 7],
+    [6, 9],
+    [12, 4]
+  ]
+}`
+    },
+    cheap: {
+      title: "低成本时段排程",
+      desc: "在电价波动场景下，将高耗能任务安排在低价时段，降低企业用电成本。",
+      defaultInput: `{
+  "tasks": ["T1", "T2", "T3"],
+  "energyUsage": [5, 3, 4],
+  "priceSlots": [0.5, 0.8, 0.3],
+  "duration": 1
+}`
+    },
+    scrabble: {
+      title: "拼字游戏紧凑布局（填字优化）",
+      desc: "在有限空间内排列单词，使占用面积最小，是二维装箱+约束满足的组合优化问题。",
+      defaultInput: `{
+  "words": ["HELLO", "WORLD", "AI", "SOLVER"],
+  "maxWidth": 10,
+  "maxHeight": 5
+}`
+    },
+    meeting: {
+      title: "会议安排",
+      desc: "为多个会议安排时间与会议室，避免冲突，满足参会人日程与设备需求。",
+      defaultInput: `{
+  "meetings": ["M1", "M2", "M3"],
+  "attendees": [["A", "B"], ["B", "C"], ["A", "C"]],
+  "slots": ["9:00", "10:00", "11:00"],
+  "rooms": ["R1", "R2"]
+}`
+    },
+    tournament: {
+      title: "巡回赛事安排",
+      desc: "为多支队伍安排比赛顺序，使总旅途最短，同时避免连续高强度比赛。",
+      defaultInput: `{
+  "teams": ["T1", "T2", "T3", "T4"],
+  "distances": [
+    [0, 100, 200, 150],
+    [100, 0, 120, 180],
+    [200, 120, 0, 90],
+    [150, 180, 90, 0]
+  ],
+  "rounds": 3
+}`
+    },
+    investment: {
+      title: "投资分配",
+      desc: "在多个投资项目中分配资金，最大化收益或风险调整后收益，满足预算与风险约束。",
+      defaultInput: `{
+  "projects": ["P1", "P2", "P3"],
+  "returns": [0.1, 0.15, 0.12],
+  "risks": [0.2, 0.3, 0.25],
+  "budget": 100,
+  "maxRisk": 0.3
+}`
+    },
+    dinner: {
+      title: "晚宴安排",
+      desc: "为宾客安排座位，满足关系偏好、职位层级、餐桌容量等约束，提升社交体验。",
+      defaultInput: `{
+  "guests": ["G1", "G2", "G3", "G4"],
+  "tables": ["Table1", "Table2"],
+  "tableCapacity": { "Table1": 2, "Table2": 2 },
+  "preferences": [
+    { "guest": "G1", "avoid": "G2" },
+    { "guest": "G3", "prefer": "G4" }
+  ]
+}`
+    },
+    tennis: {
+      title: "网球俱乐部排程",
+      desc: "为会员安排训练或比赛时间，避免场地冲突，满足会员偏好与教练可用性。",
+      defaultInput: `{
+  "members": ["M1", "M2", "M3", "M4"],
+  "courts": ["C1", "C2"],
+  "timeSlots": ["9:00", "10:00", "11:00"],
+  "coaches": ["CoachA", "CoachB"],
+  "memberCoach": {
+    "M1": "CoachA",
+    "M2": "CoachB",
+    "M3": "CoachA",
+    "M4": "CoachB"
+  }
+}`
+    },
+    flight: {
+      title: "机组人员排班",
+      desc: "为航班安排机组人员，满足飞行时间、休息时间、资质匹配等复杂航空法规约束。",
+      defaultInput: `{
+  "flights": ["F1", "F2", "F3", "F4"],
+  "crews": ["C1", "C2", "C3"],
+  "flightTimes": [2, 3, 2, 4],
+  "crewQualifications": [
+    ["F1", "F2"],
+    ["F2", "F3"],
+    ["F3", "F4"]
+  ],
+  "restHours": 8
+}`
+    }
+  };
 
-        // GB/T 18742.2-2017 Standard SDR values (sorted ascending)
-        const STANDARD_SDR = {
-            16: [10.0, 8.7, 7.14, 5.88, 4.88],
-            20: [10.0, 8.7, 7.14, 5.88, 4.88],
-            25: [11.0, 8.7, 7.14, 5.88, 4.88],
-            32: [11.0, 8.7, 7.14, 5.88, 4.88],
-            40: [11.0, 8.7, 7.14, 5.88, 4.88],
-            50: [11.0, 8.7, 7.14, 5.88, 4.88],
-            63: [11.0, 8.7, 7.14, 5.88, 4.88],
-            75: [11.0, 8.7, 7.14, 5.88, 4.88],
-            90: [11.0, 8.7, 7.14, 5.88, 4.88],
-            110: [11.0, 8.7, 7.14, 5.88, 4.88]
-        };
+  const modal = document.getElementById('scenarioModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const inputData = document.getElementById('inputData');
+  const resultOutput = document.getElementById('resultOutput');
+  const runSolverBtn = document.getElementById('runSolver');
+  const showResultBtn = document.getElementById('showResult');
+  const closeModalBtn = document.getElementById('closeModal');
 
-        // Product selection
-        productOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                productOptions.forEach(opt => opt.classList.remove('active'));
-                option.classList.add('active');
+  let currentScenario = null;
 
-                const dn = option.getAttribute('data-dn');
-                const en = option.getAttribute('data-en');
+  document.querySelectorAll('.icon-card').forEach(card => {
+    // Skip cards with direct links (like the first nurse card)
+    if (card.dataset.link === 'true') return;
 
-                if (dn !== 'custom') {
-                    nominalDiameterInput.value = dn;
-                    nominalThicknessInput.value = en;
-                }
-            });
-        });
+    card.addEventListener('click', () => {
+      const scenarioKey = card.dataset.scenario;
+      const data = scenarios[scenarioKey];
+      if (!data) return;
 
-        // Calculate weight function
-        function calculateWeight(diameter, thickness, density) {
-            const dCm = diameter / 10;
-            const eCm = thickness / 10;
-            const area = Math.PI * eCm * (dCm - eCm);
-            return area * density * 100;
-        }
+      currentScenario = scenarioKey;
+      modalTitle.textContent = data.title;
+      modalDesc.textContent = data.desc;
+      inputData.value = data.defaultInput;
+      resultOutput.textContent = '';
+      modal.style.display = 'flex';
+    });
+  });
 
-        // Calculate SDR function
-        function calculateSDR(diameter, thickness) {
-            return diameter / thickness;
-        }
+  closeModalBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
 
-        // Format number to 2 decimal places
-        function formatNumber(num) {
-            return parseFloat(num.toFixed(2));
-        }
+  runSolverBtn.addEventListener('click', () => {
+    if (!currentScenario) return;
+    resultOutput.textContent = '正在计算...';
+    setTimeout(() => {
+      resultOutput.textContent = `【${scenarios[currentScenario].title}】求解完成！
+示例结果：
+- 最优解：[模拟输出]
+- 目标值：123.45
+- 耗时：0.5s
+（注：此为前端模拟，实际对接求解器将返回真实结果）`;
+    }, 1000);
+  });
 
-        // Main calculation function
-        function calculateOptimalDimensions() {
-            const dn = parseFloat(nominalDiameterInput.value);
-            const en = parseFloat(nominalThicknessInput.value);
-            const diameterTolerance = parseFloat(diameterToleranceInput.value);
-            const thicknessTolerance = parseFloat(thicknessToleranceInput.value);
-            const minWeight = parseFloat(minWeightInput.value);
-            const maxWeight = parseFloat(maxWeightInput.value);
-            const density = parseFloat(densityInput.value);
+  showResultBtn.addEventListener('click', () => {
+    if (!resultOutput.textContent) {
+      resultOutput.textContent = '请先点击【启动计算】获取结果';
+    }
+  });
 
-            if (dn <= 0 || en <= 0) {
-                showError("公称尺寸必须大于0");
-                return;
-            }
-            if (minWeight >= maxWeight) {
-                showError("最小米重必须小于最大米重");
-                return;
-            }
-            if (density <= 0) {
-                showError("密度必须大于0");
-                return;
-            }
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+</script>
 
-            const sdrList = STANDARD_SDR[dn];
-            if (!sdrList) {
-                showError(`不支持的公称外径: ${dn}mm。请选择标准规格或手动输入。`);
-                return;
-            }
-
-            sdrList.sort((a, b) => a - b);
-
-            const minDiameter = dn - diameterTolerance;
-            const maxDiameter = dn + diameterTolerance;
-
-            let bestSolution = null;
-
-            for (const sdr of sdrList) {
-                const eNominal = dn / sdr;
-                const minThickness = eNominal - thicknessTolerance;
-                const maxThickness = eNominal + thicknessTolerance;
-
-                if (minThickness <= 0) continue;
-
-                const testD = minDiameter;
-                const testE = maxThickness;
-                const weight = calculateWeight(testD, testE, density);
-
-                if (weight >= minWeight && weight <= maxWeight) {
-                    bestSolution = {
-                        diameter: testD,
-                        thickness: testE,
-                        sdr: sdr,
-                        weight: weight
-                    };
-                    break;
-                }
-            }
-
-            if (bestSolution) {
-                hideValidation();
-                displayResults(bestSolution, dn, en);
-            } else {
-                showError(`在给定参数下未找到可行解。请尝试：
-                1. 扩大米重范围
-                2. 调整公差范围
-                3. 检查公称尺寸是否合理`);
-            }
-        }
-
-        // Display results function
-        function displayResults(solution, nominalDiameter, nominalThickness) {
-            document.getElementById('bestDimensions').textContent =
-                `${formatNumber(solution.diameter)} × ${formatNumber(solution.thickness)} mm`;
-            document.getElementById('sdrValue').textContent = formatNumber(solution.sdr);
-            document.getElementById('actualWeight').textContent = `${formatNumber(solution.weight)} g/m`;
-
-            const diameterDeviation = solution.diameter - nominalDiameter;
-            const thicknessDeviation = solution.thickness - nominalThickness;
-
-            document.getElementById('diameterDeviation').textContent =
-                `${diameterDeviation >= 0 ? '+' : ''}${formatNumber(diameterDeviation)} mm`;
-            document.getElementById('thicknessDeviation').textContent =
-                `${thicknessDeviation >= 0 ? '+' : ''}${formatNumber(thicknessDeviation)} mm`;
-
-            resultsContainer.style.display = 'block';
-            emptyState.style.display = 'none';
-        }
-
-        // Show error message
-        function showError(message) {
-            validationMessage.innerHTML = message.replace(/\n/g, '<br>');
-            validationMessage.className = 'validation-message error';
-            resultsContainer.style.display = 'none';
-            emptyState.style.display = 'block';
-        }
-
-        // Hide validation message
-        function hideValidation() {
-            validationMessage.className = 'validation-message';
-        }
-
-        // Event listener for calculate button
-        calculateBtn.addEventListener('click', () => {
-            btnText.textContent = '智能计算中...';
-            spinner.style.display = 'block';
-            calculateBtn.disabled = true;
-
-            setTimeout(() => {
-                calculateOptimalDimensions();
-                btnText.textContent = '启动智能优化';
-                spinner.style.display = 'none';
-                calculateBtn.disabled = false;
-            }, 800);
-        });
-
-        // Initialize with default calculation
-        window.addEventListener('load', () => {
-            calculateOptimalDimensions();
-        });
-    </script>
 </body>
 </html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>支点互动 | PPR管材国标冷态尺寸优化系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D4FF; /* 云纳科技青色 */
+            --secondary-color: #7B2FFF; /* 科技紫 */
+            --accent-color: #00FFB3; /* 点缀绿 */
+            --dark-bg: #0A0F1E; /* 更深邃的背景 */
+            --light-dark-bg: #12182C;
+            --lighter-dark-bg: #1E2438;
+            --text-primary: #E6F1FF;
+            --text-secondary: #8892B0;
+            --success-color: #00D4FF;
+            --warning-color: #FFB800;
+            --danger-color: #FF6B6B;
+            --border-radius: 8px;
+            --box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #0F172A 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* Header */
+        header {
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--light-dark-bg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: var(--light-dark-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--lighter-dark-bg);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .card-title h2 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .card-title p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: var(--dark-bg);
+            border: 1px solid var(--lighter-dark-bg);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+        }
+
+        .input-with-unit {
+            position: relative;
+        }
+
+        .unit {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .range-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 30px;
+        }
+
+        .result-item {
+            background-color: var(--dark-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .result-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .result-value.highlight {
+            color: var(--accent-color);
+        }
+
+        .result-value.success {
+            color: var(--success-color);
+        }
+
+        .result-value.warning {
+            color: var(--warning-color);
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        /* Validation Messages */
+        .validation-message {
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .validation-message.error {
+            background-color: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid var(--danger-color);
+            color: var(--danger-color);
+            display: block;
+        }
+
+        .validation-message.success {
+            background-color: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid var(--success-color);
+            color: var(--success-color);
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid var(--light-dark-bg);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Product Selector */
+        .product-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .product-option {
+            padding: 12px;
+            background-color: var(--dark-bg);
+            border: 1px solid var(--lighter-dark-bg);
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .product-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .product-option.active {
+            background-color: rgba(0, 212, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--accent-color);
+        }
+
+        .product-option .spec {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* SDR Badge */
+        .sdr-badge {
+            display: inline-block;
+            background: rgba(0, 255, 179, 0.1);
+            color: var(--accent-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+        </div>
+        <nav>
+            <a href="#" style="color: var(--text-secondary); text-decoration: none;">
+                <i class="fas fa-question-circle"></i> 智能助手
+            </a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Title -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                PPR管材国标冷态尺寸优化系统
+            </h1>
+            <p style="color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+                基于云纳科技LLM底座与RAG知识库，通过智能算法求解满足国标约束的最佳冷态尺寸
+            </p>
+        </div>
+
+        <div class="main-content">
+            <!-- Input Parameters Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <div class="card-title">
+                        <h2>参数配置</h2>
+                        <p>设置米重范围与产品规格</p>
+                    </div>
+                </div>
+
+                <!-- Product Specification -->
+                <div class="form-group">
+                    <label class="form-label">产品规格选择</label>
+                    <div class="product-selector">
+                        <div class="product-option active" data-dn="20" data-en="2.0">
+                            <div>DN20 × 2.0</div>
+                            <div class="spec">SDR 10</div>
+                        </div>
+                        <div class="product-option" data-dn="25" data-en="2.3">
+                            <div>DN25 × 2.3</div>
+                            <div class="spec">SDR 11</div>
+                        </div>
+                        <div class="product-option" data-dn="32" data-en="2.9">
+                            <div>DN32 × 2.9</div>
+                            <div class="spec">SDR 11</div>
+                        </div>
+                        <div class="product-option" data-dn="custom">
+                            <div>自定义</div>
+                            <div class="spec">手动输入</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nominal Dimensions -->
+                <div class="form-group">
+                    <label class="form-label">公称尺寸 (mm)</label>
+                    <div class="range-inputs">
+                        <div class="input-with-unit">
+                            <input type="number" id="nominalDiameter" class="form-input" value="20" step="0.1">
+                            <span class="unit">外径</span>
+                        </div>
+                        <div class="input-with-unit">
+                            <input type="number" id="nominalThickness" class="form-input" value="2.0" step="0.1">
+                            <span class="unit">壁厚</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tolerances -->
+                <div class="form-group">
+                    <label class="form-label">公差范围 (mm)</label>
+                    <div class="range-inputs">
+                        <div class="input-with-unit">
+                            <input type="number" id="diameterTolerance" class="form-input" value="0.3" step="0.05">
+                            <span class="unit">外径 ±</span>
+                        </div>
+                        <div class="input-with-unit">
+                            <input type="number" id="thicknessTolerance" class="form-input" value="0.2" step="0.05">
+                            <span class="unit">壁厚 ±</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weight Range -->
+                <div class="form-group">
+                    <label class="form-label">米重范围 (g/m)</label>
+                    <div class="range-inputs">
+                        <div class="input-with-unit">
+                            <input type="number" id="minWeight" class="form-input" value="100" step="1">
+                            <span class="unit">最小值</span>
+                        </div>
+                        <div class="input-with-unit">
+                            <input type="number" id="maxWeight" class="form-input" value="150" step="1">
+                            <span class="unit">最大值</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Material Density -->
+                <div class="form-group">
+                    <label class="form-label">材料参数</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="density" class="form-input" value="0.91" step="0.01">
+                        <span class="unit">密度 (g/cm³)</span>
+                    </div>
+                </div>
+
+                <!-- Calculate Button -->
+                <button id="calculateBtn" class="btn">
+                    <span id="btnText">启动智能优化</span>
+                    <div id="spinner" class="spinner"></div>
+                    <i class="fas fa-robot"></i>
+                </button>
+
+                <!-- Validation Message -->
+                <div id="validationMessage" class="validation-message"></div>
+            </div>
+
+            <!-- Results Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-title">
+                        <h2>优化结果</h2>
+                        <p>最佳冷态尺寸与性能指标</p>
+                    </div>
+                </div>
+
+                <div id="resultsContainer" style="display: none;">
+                    <!-- Best Solution -->
+                    <div class="result-item" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 47, 255, 0.1));">
+                        <div class="result-label">最佳冷态尺寸</div>
+                        <div class="result-value highlight" id="bestDimensions">19.70 × 2.20 mm</div>
+                    </div>
+
+                    <!-- Key Metrics -->
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="result-label">SDR 值</div>
+                            <div class="result-value success" id="sdrValue">10.00</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">实际米重</div>
+                            <div class="result-value" id="actualWeight">110.07 g/m</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">外径偏差</div>
+                            <div class="result-value warning" id="diameterDeviation">-0.30 mm</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">壁厚偏差</div>
+                            <div class="result-value success" id="thicknessDeviation">+0.20 mm</div>
+                        </div>
+                    </div>
+
+                    <!-- Verification -->
+                    <div style="margin-top: 20px;">
+                        <h3 style="margin-bottom: 15px; color: var(--text-primary);">合规性验证</h3>
+                        <div class="result-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="result-label">米重是否在范围内</span>
+                                <span id="weightCheck" class="result-value success">✓ 是</span>
+                            </div>
+                        </div>
+                        <div class="result-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="result-label">是否符合 GB/T 18742.2-2017</span>
+                                <span id="standardCheck" class="result-value success">✓ 是</span>
+                            </div>
+                        </div>
+                        <div class="result-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="result-label">SDR 是否最小</span>
+                                <span id="sdrCheck" class="result-value success">✓ 是</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" style="text-align: center; padding: 60px 20px;">
+                    <i class="fas fa-flask" style="font-size: 3rem; color: var(--lighter-dark-bg); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--text-secondary); margin-bottom: 10px;">等待智能计算</h3>
+                    <p style="color: var(--text-secondary);">配置好参数后点击"启动智能优化"按钮</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Algorithm Info -->
+        <div class="card" style="margin-top: 30px;">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div class="card-title">
+                    <h2>算法说明</h2>
+                    <p>基于国标离散SDR的智能优化算法</p>
+                </div>
+            </div>
+            <div style="color: var(--text-secondary);">
+                <p><strong>优化目标：</strong>在满足国标GB/T 18742.2-2017的前提下，找到最小SDR值</p>
+                <p><strong>约束条件：</strong>米重 ∈ [MinWeight, MaxWeight]，尺寸 ∈ 公差范围</p>
+                <p><strong>算法策略：</strong>从国标允许的最小SDR开始验证，找到第一个满足米重约束的解</p>
+                <p><strong>物理公式：</strong>米重 = π × e × (D - e) × ρ</p>
+                <p><strong>国标SDR：</strong>SDR必须为标准离散值（如10.0、8.7、7.14等）</p>
+                <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--lighter-dark-bg);">
+                    <i class="fas fa-info-circle" style="color: var(--accent-color);"></i>
+                    本系统由云纳科技提供技术支持，融合了大模型推理与工业机理模型，确保计算结果的精准性与合规性。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 云纳科技 (Yunnatech). All Rights Reserved.</p>
+            <p>PPR管材冷态尺寸优化系统 v2.0 | 基于 GB/T 18742.2-2017 标准开发</p>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const nominalDiameterInput = document.getElementById('nominalDiameter');
+        const nominalThicknessInput = document.getElementById('nominalThickness');
+        const diameterToleranceInput = document.getElementById('diameterTolerance');
+        const thicknessToleranceInput = document.getElementById('thicknessTolerance');
+        const minWeightInput = document.getElementById('minWeight');
+        const maxWeightInput = document.getElementById('maxWeight');
+        const densityInput = document.getElementById('density');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const btnText = document.getElementById('btnText');
+        const spinner = document.getElementById('spinner');
+        const validationMessage = document.getElementById('validationMessage');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const emptyState = document.getElementById('emptyState');
+        const productOptions = document.querySelectorAll('.product-option');
+
+        // Constants
+        const STEP = 0.01; // Search step in mm
+
+        // GB/T 18742.2-2017 Standard SDR values (sorted ascending)
+        const STANDARD_SDR = {
+            16: [10.0, 8.7, 7.14, 5.88, 4.88],
+            20: [10.0, 8.7, 7.14, 5.88, 4.88],
+            25: [11.0, 8.7, 7.14, 5.88, 4.88],
+            32: [11.0, 8.7, 7.14, 5.88, 4.88],
+            40: [11.0, 8.7, 7.14, 5.88, 4.88],
+            50: [11.0, 8.7, 7.14, 5.88, 4.88],
+            63: [11.0, 8.7, 7.14, 5.88, 4.88],
+            75: [11.0, 8.7, 7.14, 5.88, 4.88],
+            90: [11.0, 8.7, 7.14, 5.88, 4.88],
+            110: [11.0, 8.7, 7.14, 5.88, 4.88]
+        };
+
+        // Product selection
+        productOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                productOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+
+                const dn = option.getAttribute('data-dn');
+                const en = option.getAttribute('data-en');
+
+                if (dn !== 'custom') {
+                    nominalDiameterInput.value = dn;
+                    nominalThicknessInput.value = en;
+                }
+            });
+        });
+
+        // Calculate weight function
+        function calculateWeight(diameter, thickness, density) {
+            const dCm = diameter / 10;
+            const eCm = thickness / 10;
+            const area = Math.PI * eCm * (dCm - eCm);
+            return area * density * 100;
+        }
+
+        // Calculate SDR function
+        function calculateSDR(diameter, thickness) {
+            return diameter / thickness;
+        }
+
+        // Format number to 2 decimal places
+        function formatNumber(num) {
+            return parseFloat(num.toFixed(2));
+        }
+
+        // Main calculation function
+        function calculateOptimalDimensions() {
+            const dn = parseFloat(nominalDiameterInput.value);
+            const en = parseFloat(nominalThicknessInput.value);
+            const diameterTolerance = parseFloat(diameterToleranceInput.value);
+            const thicknessTolerance = parseFloat(thicknessToleranceInput.value);
+            const minWeight = parseFloat(minWeightInput.value);
+            const maxWeight = parseFloat(maxWeightInput.value);
+            const density = parseFloat(densityInput.value);
+
+            if (dn <= 0 || en <= 0) {
+                showError("公称尺寸必须大于0");
+                return;
+            }
+            if (minWeight >= maxWeight) {
+                showError("最小米重必须小于最大米重");
+                return;
+            }
+            if (density <= 0) {
+                showError("密度必须大于0");
+                return;
+            }
+
+            const sdrList = STANDARD_SDR[dn];
+            if (!sdrList) {
+                showError(`不支持的公称外径: ${dn}mm。请选择标准规格或手动输入。`);
+                return;
+            }
+
+            sdrList.sort((a, b) => a - b);
+
+            const minDiameter = dn - diameterTolerance;
+            const maxDiameter = dn + diameterTolerance;
+
+            let bestSolution = null;
+
+            for (const sdr of sdrList) {
+                const eNominal = dn / sdr;
+                const minThickness = eNominal - thicknessTolerance;
+                const maxThickness = eNominal + thicknessTolerance;
+
+                if (minThickness <= 0) continue;
+
+                const testD = minDiameter;
+                const testE = maxThickness;
+                const weight = calculateWeight(testD, testE, density);
+
+                if (weight >= minWeight && weight <= maxWeight) {
+                    bestSolution = {
+                        diameter: testD,
+                        thickness: testE,
+                        sdr: sdr,
+                        weight: weight
+                    };
+                    break;
+                }
+            }
+
+            if (bestSolution) {
+                hideValidation();
+                displayResults(bestSolution, dn, en);
+            } else {
+                showError(`在给定参数下未找到可行解。请尝试：
+                1. 扩大米重范围
+                2. 调整公差范围
+                3. 检查公称尺寸是否合理`);
+            }
+        }
+
+        // Display results function
+        function displayResults(solution, nominalDiameter, nominalThickness) {
+            document.getElementById('bestDimensions').textContent =
+                `${formatNumber(solution.diameter)} × ${formatNumber(solution.thickness)} mm`;
+            document.getElementById('sdrValue').textContent = formatNumber(solution.sdr);
+            document.getElementById('actualWeight').textContent = `${formatNumber(solution.weight)} g/m`;
+
+            const diameterDeviation = solution.diameter - nominalDiameter;
+            const thicknessDeviation = solution.thickness - nominalThickness;
+
+            document.getElementById('diameterDeviation').textContent =
+                `${diameterDeviation >= 0 ? '+' : ''}${formatNumber(diameterDeviation)} mm`;
+            document.getElementById('thicknessDeviation').textContent =
+                `${thicknessDeviation >= 0 ? '+' : ''}${formatNumber(thicknessDeviation)} mm`;
+
+            resultsContainer.style.display = 'block';
+            emptyState.style.display = 'none';
+        }
+
+        // Show error message
+        function showError(message) {
+            validationMessage.innerHTML = message.replace(/\n/g, '<br>');
+            validationMessage.className = 'validation-message error';
+            resultsContainer.style.display = 'none';
+            emptyState.style.display = 'block';
+        }
+
+        // Hide validation message
+        function hideValidation() {
+            validationMessage.className = 'validation-message';
+        }
+
+        // Event listener for calculate button
+        calculateBtn.addEventListener('click', () => {
+            btnText.textContent = '智能计算中...';
+            spinner.style.display = 'block';
+            calculateBtn.disabled = true;
+
+            setTimeout(() => {
+                calculateOptimalDimensions();
+                btnText.textContent = '启动智能优化';
+                spinner.style.display = 'none';
+                calculateBtn.disabled = false;
+            }, 800);
+        });
+
+        // Initialize with default calculation
+        window.addEventListener('load', () => {
+            calculateOptimalDimensions();
+        });
+    </script>
+</body>
+</html>
