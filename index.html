@@ -65,9 +65,6 @@
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
       border: 1px solid rgba(255,255,255,0.08);
-      text-decoration: none;
-      color: inherit;
-      display: block;
     }
 
     .icon-card:hover {
@@ -142,7 +139,7 @@
       max-width: 600px;
       max-height: 80vh;
       overflow-y: auto;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
     .modal-header {
@@ -277,25 +274,30 @@
   </header>
 
   <div class="grid" id="scenarioGrid">
-    <a class="icon-card" href="ppr.html" data-scenario="nurse" data-link="true">
-      <div class="icon nurse">📈</div>
-      <h3>移动平均法</h3>
-      <p>Moving average</p>
+    <a href="ppr.html" class="icon-card" style="text-decoration:none;color:inherit;">
+      <div class="icon" style="background:#0ea5e9;">🔧</div>
+      <h3>管材冷态尺寸寻优</h3>
+      <p>Pipe dimension optimization</p>
     </a>
+    <div class="icon-card" data-scenario="nurse">
+      <div class="icon nurse">🧑‍⚕️</div>
+      <h3>护士排班</h3>
+      <p>Nurse rostering</p>
+    </div>
     <div class="icon-card" data-scenario="salesman">
-      <div class="icon salesman">📉</div>
-      <h3>指数平滑法</h3>
-      <p>Exponential smoothing</p>
+      <div class="icon salesman">👨‍💼</div>
+      <h3>旅行推销员（路径优化）</h3>
+      <p>Traveling salesman</p>
     </div>
     <div class="icon-card" data-scenario="task">
-      <div class="icon task">🌤️</div>
-      <h3>季节指数法</h3>
-      <p>Seasonal index</p>
+      <div class="icon task">✅</div>
+      <h3>任务分配</h3>
+      <p>Task assigning</p>
     </div>
     <div class="icon-card" data-scenario="cloud">
-      <div class="icon cloud">🏷️</div>
-      <h3>物料打标</h3>
-      <p>Material tagging</p>
+      <div class="icon cloud">☁️</div>
+      <h3>云资源平衡</h3>
+      <p>Cloud balancing</p>
     </div>
     <div class="icon-card" data-scenario="conference">
       <div class="icon conference">📅</div>
@@ -386,6 +388,26 @@
       <div class="icon flight">✈️</div>
       <h3>机组人员排班</h3>
       <p>Flight crew scheduling</p>
+    </div>
+    <div class="icon-card" style="cursor:default;" onclick="return false;">
+      <div class="icon" style="background:#f97316;">📈</div>
+      <h3>移动平均法</h3>
+      <p>Moving average</p>
+    </div>
+    <div class="icon-card" style="cursor:default;" onclick="return false;">
+      <div class="icon" style="background:#a855f7;">📉</div>
+      <h3>指数平滑法</h3>
+      <p>Exponential smoothing</p>
+    </div>
+    <div class="icon-card" style="cursor:default;" onclick="return false;">
+      <div class="icon" style="background:#14b8a6;">🌤️</div>
+      <h3>季节指数法</h3>
+      <p>Seasonal index</p>
+    </div>
+    <div class="icon-card" style="cursor:default;" onclick="return false;">
+      <div class="icon" style="background:#e11d48;">🏷️</div>
+      <h3>物料打标</h3>
+      <p>Material labeling</p>
     </div>
   </div>
 
@@ -707,9 +729,6 @@
   let currentScenario = null;
 
   document.querySelectorAll('.icon-card').forEach(card => {
-    // Skip cards with direct links (like the first nurse card)
-    if (card.dataset.link === 'true') return;
-
     card.addEventListener('click', () => {
       const scenarioKey = card.dataset.scenario;
       const data = scenarios[scenarioKey];
